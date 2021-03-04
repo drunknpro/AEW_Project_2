@@ -21,23 +21,9 @@ public class SQLiteDatabase {
 		dbPath = "./" + dateiname;
 	}
 
-//	private void openDatabase(String databaseName) {
-//		try {
-//			Class.forName("org.sqlite.JDBC");
-//			connection = DriverManager.getConnection("jdbc:sqlite:test.db");
-//			connection.setAutoCommit(false);
-//			System.out.println("Opened database successfully");
-//		} catch (Exception e) {
-//			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-//			System.exit(0);
-//		}
-//	}
-
-//	private void closeDatabase() {
-//		connection.commit();
-//        connection.close();
-//	}
-
+	//////////////////////////////////////////////
+	// Daten in die SQLite-Datenbank schreiben. //
+	//////////////////////////////////////////////
 	public void insertClientToDatabase(String vorname, String nachname, String adresse, String wohnort,
 			String postleitzahl, String telefonnummer) {
 		try {
@@ -50,8 +36,8 @@ public class SQLiteDatabase {
 			// statement setzen
 			statement = connection.createStatement();
 			String sql = "INSERT INTO KundenData (vorname,nachname,adresse,wohnort,postleitzahl,telefonnummer) "
-					+ "VALUES ('" + vorname + "'," + nachname + "'," + adresse + "'," + wohnort + "'," + postleitzahl
-					+ "'," + telefonnummer + "');";
+					+ "VALUES ('" + vorname + "','" + nachname + "','" + adresse + "','" + wohnort + "','"
+					+ postleitzahl + "','" + telefonnummer + "');";
 			// Daten in die Datenbank schreiben
 			statement.execute(sql);
 			// statement schliessen
@@ -66,6 +52,9 @@ public class SQLiteDatabase {
 		}
 	}
 
+	//////////////////////////////////////////////
+	// Daten aus der SQLite-Datenbank lesen. //
+	//////////////////////////////////////////////
 	public void getClientsFromDatabase() {
 		try {
 			// verbindung zur DB-Datei aufbauen
@@ -78,6 +67,7 @@ public class SQLiteDatabase {
 			statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM KundenData;");
 
+			// Results pro Zeile ausgeben
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				String vorname = rs.getString("vorname");
