@@ -4,9 +4,9 @@ import java.sql.*;
 
 public class SQLiteDatabase {
 
-	private Connection connection = null;
-	private String dbPath = null;
-	private Statement statement = null;
+	private static Connection connection = null;
+	private static String dbPath = null;
+	private static Statement statement = null;
 
 	static {
 		try {
@@ -55,7 +55,8 @@ public class SQLiteDatabase {
 	//////////////////////////////////////////////
 	// Daten aus der SQLite-Datenbank lesen. //
 	//////////////////////////////////////////////
-	public void getClientsFromDatabase() {
+	public static String getClientsFromDatabase() {
+		String returnString = "";
 		try {
 			// verbindung zur DB-Datei aufbauen
 			Class.forName("org.sqlite.JDBC");
@@ -74,12 +75,7 @@ public class SQLiteDatabase {
 				String nachname = rs.getString("nachname");
 				String adresse = rs.getString("adresse");
 				String wohnort = rs.getString("wohnort");
-
-				System.out.println("ID = " + id);
-				System.out.println("VORNAME = " + vorname);
-				System.out.println("NACHNAME = " + nachname);
-				System.out.println("ADRESSE = " + adresse);
-				System.out.println("WOHNORT = " + wohnort);
+				returnString = returnString + "ID = " + id + "\t VORNAME = " + vorname + "\t NACHNAME = " + nachname + "\t ADRESSE = " + adresse + "\t WOHNORT = " + wohnort + " \n ";
 				System.out.println();
 			}
 			rs.close();
@@ -89,5 +85,6 @@ public class SQLiteDatabase {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
+		return returnString;
 	}
 }
