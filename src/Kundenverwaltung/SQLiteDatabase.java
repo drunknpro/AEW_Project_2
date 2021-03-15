@@ -1,6 +1,7 @@
 package Kundenverwaltung;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class SQLiteDatabase {
 
@@ -55,8 +56,8 @@ public class SQLiteDatabase {
 	//////////////////////////////////////////////
 	// Daten aus der SQLite-Datenbank lesen. //
 	//////////////////////////////////////////////
-	public static String getClientsFromDatabase() {
-		String returnString = "";
+	public static ArrayList<Client> getClientsFromDatabase() {
+		ArrayList<Client> clients = new ArrayList<Client>();
 		try {
 			// verbindung zur DB-Datei aufbauen
 			Class.forName("org.sqlite.JDBC");
@@ -70,13 +71,16 @@ public class SQLiteDatabase {
 
 			// Results pro Zeile ausgeben
 			while (rs.next()) {
+				
 				int id = rs.getInt("id");
 				String vorname = rs.getString("vorname");
 				String nachname = rs.getString("nachname");
 				String adresse = rs.getString("adresse");
 				String wohnort = rs.getString("wohnort");
-				returnString = returnString + "ID = " + id + "\t VORNAME = " + vorname + "\t NACHNAME = " + nachname + "\t ADRESSE = " + adresse + "\t WOHNORT = " + wohnort + " \n ";
+				String postleitzahl = rs.getString("postleitzahl");
+				String telefonnummer = rs.getString("telefonnummer");
 				System.out.println();
+				clients.add(new Client(id, vorname, nachname, adresse, wohnort, postleitzahl, telefonnummer));
 			}
 			rs.close();
 			statement.close();
@@ -85,6 +89,6 @@ public class SQLiteDatabase {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
-		return returnString;
+		return clients;
 	}
 }
