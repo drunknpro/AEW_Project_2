@@ -13,15 +13,16 @@ import javax.swing.JMenuItem;
 import java.awt.BorderLayout;
 import javax.swing.JTable;
 import java.awt.Button;
+import javax.swing.JPanel;
+import javax.swing.JButton;
 
 public class MainMenu {
 
 	private JFrame frmKundenverwaltung;
-	private static JTable table_clients;
-	private static ArrayList<Client> data;
-	
-	static SQLiteDatabase db = new SQLiteDatabase("test.db");
-	
+	private ArrayList<Client> data;
+
+	private SQLiteDatabase db = new SQLiteDatabase("test.db");
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -49,17 +50,17 @@ public class MainMenu {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
-//		SQLiteDatabase db = new SQLiteDatabase("test.db");
+	public void initialize() {
+		SQLiteDatabase db = new SQLiteDatabase("test.db");
 		System.out.println("Datenbank geladen");
 
-		db.getClientsFromDatabase();
+//		db.getClientsFromDatabase();
 
 //		db.insertClientToDatabase("Nils", "Wegner", "Musterstraﬂe 1", "Musterstadt", "12345", "12345/6789");
 //
 //		db.getClientsFromDatabase();
 
-		data = SQLiteDatabase.getClientsFromDatabase();
+		data = db.getClientsFromDatabase();
 
 		frmKundenverwaltung = new JFrame();
 		frmKundenverwaltung.setTitle("Kundenverwaltung");
@@ -76,6 +77,47 @@ public class MainMenu {
 		mntmNewMenuItem.addActionListener(new exitApp());
 
 		mnNewMenu.add(mntmNewMenuItem);
+
+		JPanel panel = new JPanel();
+		frmKundenverwaltung.getContentPane().add(panel, BorderLayout.NORTH);
+
+		Vector dataV = new Vector();
+		for (int i = 0; i < data.size(); i++) {
+			Vector row = new Vector();
+			row.add(data.get(i).getId());
+			row.add(data.get(i).getName());
+			row.add(data.get(i).getNachname());
+			row.add(data.get(i).getAdresse());
+			row.add(data.get(i).getWohnort());
+			row.add(data.get(i).getPostleitzahl());
+			row.add(data.get(i).getTelefonnummer());
+			dataV.add(row);
+		}
+
+		Vector titles = new Vector();
+		titles.add("id");
+		titles.add("Vorname");
+		titles.add("Nachname");
+		titles.add("Adresse");
+		titles.add("Wohnort");
+		titles.add("Postleitzahl");
+		titles.add("Telefonnummer");
+		
+		table = new JTable(dataV, titles);
+		panel.add(table);
+
+		JButton btnAddClient = new JButton("Add Client");
+		btnAddClient.addActionListener(new addClient());
+		panel.add(btnAddClient);
+
+		
+
+	}
+
+	public void renewClientTable() {
+
+		data = db.getClientsFromDatabase();
+
 		Vector dataV = new Vector();
 		for (int i = 0; i < data.size(); i++) {
 			Vector row = new Vector();
@@ -98,15 +140,10 @@ public class MainMenu {
 		titles.add("Postleitzahl");
 		titles.add("Telefonnummer");
 
-		table_clients = new JTable(dataV, titles);
-
-		frmKundenverwaltung.getContentPane().add(table_clients.getTableHeader(), BorderLayout.NORTH);
-		frmKundenverwaltung.getContentPane().add(table_clients, BorderLayout.CENTER);
-		
-		Button addNewClientButton = new Button("Add Client");
-		addNewClientButton.addActionListener(new addNewClient());
-		frmKundenverwaltung.getContentPane().add(addNewClientButton, BorderLayout.SOUTH);
-
+		table.invalidate();
+		table.revalidate();
+		table = new JTable(dataV, titles);
+		table.repaint();
 	}
 
 	// exit app
@@ -115,16 +152,11 @@ public class MainMenu {
 			System.exit(0);
 		}
 	}
-	
-	// Add new Client to SQL
-	static class addNewClient implements ActionListener{
+
+	class addClient implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			db.insertClientToDatabase("Nils", "Wegner", "Musterstraﬂe 1", "Musterstadt", "12345", "12345/6789");
-			data = SQLiteDatabase.getClientsFromDatabase();
-			System.out.println(data);
-			table_clients.invalidate();
-			table_clients.revalidate();
-			table_clients.repaint();
+			db.insertClientToDatabase("Nils", "Wegner", "MusterStraﬂe 1", "Musterstadt", "12345", "12345/6789");
+			renewClientTable();
 		}
 	}
 
