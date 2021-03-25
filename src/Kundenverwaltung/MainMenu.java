@@ -111,15 +111,13 @@ public class MainMenu {
 		titles.add("Wohnort");
 		titles.add("Postleitzahl");
 		titles.add("Telefonnummer");
-		
+
 		table = new JTable(dataV, titles);
 		panel.add(table);
 
 		JButton btnAddClient = new JButton("Add Client");
 		btnAddClient.addActionListener(new addClient());
 		panel.add(btnAddClient);
-
-		
 
 	}
 
@@ -169,9 +167,9 @@ public class MainMenu {
 			createClient.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			createClient.setBounds(120, 120, 500, 300);
 			createClient.setLayout(null);
-			
+
 			//////////////////////////////////
-			// VornamenLabel und -Texxtfeld //
+			// VornamenLabel und -Textfeld //
 			//////////////////////////////////
 			// Vornamen-Label //
 			JLabel labelVorname = new JLabel("Vorname:");
@@ -182,25 +180,106 @@ public class MainMenu {
 			JTextField textVorname = new JTextField();
 			textVorname.setBounds(115, 10, 300, 20);
 			createClient.add(textVorname);
-			
+
 			///////////////////////////////////
-			// NachnamenLabel und -Texxtfeld //
+			// NachnamenLabel und -Textfeld //
 			///////////////////////////////////
 			// Nachnamen-Label //
 			JLabel labelNachname = new JLabel("Nachname:");
 			labelNachname.setBounds(10, 30, 100, 20);
 			labelNachname.setHorizontalAlignment(SwingConstants.RIGHT);
 			createClient.add(labelNachname);
-			
-			// Vornamen-Textfeld //
+
+			// Nachnamen-Textfeld //
 			JTextField textNachname = new JTextField();
 			textNachname.setBounds(115, 30, 300, 20);
 			createClient.add(textNachname);
+
+			///////////////////////////////////
+			// AdressenLabel und -Textfeld //
+			///////////////////////////////////
+			// Adresse-Label //
+			JLabel labelAdresse = new JLabel("Adresse:");
+			labelAdresse.setBounds(10, 50, 100, 20);
+			labelAdresse.setHorizontalAlignment(SwingConstants.RIGHT);
+			createClient.add(labelAdresse);
+
+			// Adresse-Textfeld //
+			JTextField textAdresse = new JTextField();
+			textAdresse.setBounds(115, 50, 300, 20);
+			createClient.add(textAdresse);
+
+			
+///////////////////////////////////
+// AdressenLabel und -Textfeld //
+///////////////////////////////////
+// Adresse-Label //
+JLabel labelPostleitzahl = new JLabel("PLZ:");
+labelPostleitzahl.setBounds(10, 70, 100, 20);
+labelPostleitzahl.setHorizontalAlignment(SwingConstants.RIGHT);
+createClient.add(labelPostleitzahl);
+
+// Adresse-Textfeld //
+JTextField textPostleitzahl = new JTextField();
+textPostleitzahl.setBounds(115, 70, 300, 20);
+createClient.add(textPostleitzahl);
+
+
+///////////////////////////////////
+//AdressenLabel und -Textfeld //
+///////////////////////////////////
+//Adresse-Label //
+JLabel labelWohnort = new JLabel("Wohnort:");
+labelWohnort.setBounds(10, 90, 100, 20);
+labelWohnort.setHorizontalAlignment(SwingConstants.RIGHT);
+createClient.add(labelWohnort);
+
+//Adresse-Textfeld //
+JTextField textWohnort = new JTextField();
+textWohnort.setBounds(115, 90, 300, 20);
+createClient.add(textWohnort);
+
+
+///////////////////////////////////
+//AdressenLabel und -Textfeld //
+///////////////////////////////////
+//Adresse-Label //
+JLabel labelTelefonnummer = new JLabel("Telefonnummer:");
+labelTelefonnummer.setBounds(10, 110, 100, 20);
+labelTelefonnummer.setHorizontalAlignment(SwingConstants.RIGHT);
+createClient.add(labelTelefonnummer);
+
+//Adresse-Textfeld //
+JTextField textTelefonnummer = new JTextField();
+textTelefonnummer.setBounds(115, 110, 300, 20);
+createClient.add(textTelefonnummer);
+			
+			
+			//////////////////
+			// Submitbutton //
+			//////////////////
+			JButton submitButton = new JButton("Kunden Anlegen!");
+			submitButton.setBounds(115, 130, 150, 50);
+			submitButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+				addNewClient(textVorname.getText(), textNachname.getText(), textAdresse.getText(), textWohnort.getText(), textPostleitzahl.getText(), textTelefonnummer.getText());
+				renewClientTable();
+				}
+			});
+			createClient.add(submitButton);
 			
 			createClient.setVisible(true);
-			// db.insertClientToDatabase("Nils", "Wegner", "MusterStraﬂe 1", "Musterstadt", "12345", "12345/6789");
+			// db.insertClientToDatabase("Nils", "Wegner", "MusterStraﬂe 1", "Musterstadt",
+			// "12345", "12345/6789");
 			// renewClientTable();
+			
 		}
+	}
+
+	public void addNewClient(String vorname, String nachname, String adresse, String wohnort, String postleitzahl,
+			String telefonnummer) {
+		db.insertClientToDatabase(vorname, nachname, adresse, wohnort, postleitzahl, telefonnummer);
 	}
 
 }
