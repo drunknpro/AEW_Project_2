@@ -7,18 +7,27 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.BorderLayout;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.Button;
+import java.awt.Dialog.ModalityType;
+
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 
 public class MainMenu {
 
 	private JFrame frmKundenverwaltung;
+	private JDialog createClient;
 	private ArrayList<Client> data;
 
 	private SQLiteDatabase db = new SQLiteDatabase("test.db");
@@ -142,8 +151,9 @@ public class MainMenu {
 
 		table.invalidate();
 		table.revalidate();
-		table = new JTable(dataV, titles);
+		table.setModel(new DefaultTableModel(dataV, titles));
 		table.repaint();
+		this.frmKundenverwaltung.repaint();
 	}
 
 	// exit app
@@ -155,8 +165,41 @@ public class MainMenu {
 
 	class addClient implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			db.insertClientToDatabase("Nils", "Wegner", "MusterStraﬂe 1", "Musterstadt", "12345", "12345/6789");
-			renewClientTable();
+			createClient = new JDialog(frmKundenverwaltung, "Kunden Anlegen", ModalityType.APPLICATION_MODAL);
+			createClient.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			createClient.setBounds(120, 120, 500, 300);
+			createClient.setLayout(null);
+			
+			//////////////////////////////////
+			// VornamenLabel und -Texxtfeld //
+			//////////////////////////////////
+			// Vornamen-Label //
+			JLabel labelVorname = new JLabel("Vorname:");
+			labelVorname.setBounds(10, 10, 100, 20);
+			labelVorname.setHorizontalAlignment(SwingConstants.RIGHT);
+			createClient.add(labelVorname);
+			// Vornamen-Textfeld //
+			JTextField textVorname = new JTextField();
+			textVorname.setBounds(115, 10, 300, 20);
+			createClient.add(textVorname);
+			
+			///////////////////////////////////
+			// NachnamenLabel und -Texxtfeld //
+			///////////////////////////////////
+			// Nachnamen-Label //
+			JLabel labelNachname = new JLabel("Nachname:");
+			labelNachname.setBounds(10, 30, 100, 20);
+			labelNachname.setHorizontalAlignment(SwingConstants.RIGHT);
+			createClient.add(labelNachname);
+			
+			// Vornamen-Textfeld //
+			JTextField textNachname = new JTextField();
+			textNachname.setBounds(115, 30, 300, 20);
+			createClient.add(textNachname);
+			
+			createClient.setVisible(true);
+			// db.insertClientToDatabase("Nils", "Wegner", "MusterStraﬂe 1", "Musterstadt", "12345", "12345/6789");
+			// renewClientTable();
 		}
 	}
 
