@@ -190,6 +190,7 @@ public class MainMenu {
 			labelNachname.setHorizontalAlignment(SwingConstants.RIGHT);
 			createClient.add(labelNachname);
 
+			////////////////////////
 			// Nachnamen-Textfeld //
 			JTextField textNachname = new JTextField();
 			textNachname.setBounds(115, 30, 300, 20);
